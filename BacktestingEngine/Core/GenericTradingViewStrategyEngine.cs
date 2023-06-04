@@ -1,4 +1,7 @@
-﻿namespace BacktestingEngine.Core
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+
+namespace BacktestingEngine.Core
 {
     internal class GenericTradingViewStrategyEngine : IStrategyExecutionEngine
     {
@@ -8,7 +11,7 @@
 
         private List<Candlestick> _priceCandlesticks;
         private readonly IStrategy _strategy;
-
+        private readonly IFilter _filter;
         private decimal _percentageUsedForTrade = 100;
         private decimal _currentCapital = initialCapitalUSD;
 
@@ -19,15 +22,23 @@
         private DateTime _openingDateTime;
         private decimal _currentContracts;
 
-        public GenericTradingViewStrategyEngine(List<Candlestick> pricesVector, IStrategy strategyToExecute)
+        public GenericTradingViewStrategyEngine(List<Candlestick> pricesVector, IStrategy strategyToExecute, IFilter filter)
         {
             _priceCandlesticks = pricesVector;
             _strategy = strategyToExecute;
+            _filter = filter;
             _currentStrategyState = TradeState.Waiting;
         }
 
         public TradeExecutionResult ExecuteStrategy(Candlestick price)
         {
+
+            var filteredPrice = _filter.FilterPrice(price);
+            if (filteredPrice == null)
+            {
+                return GetCurrentTradeExecutionStatus();
+            }
+
 
             var signal = _strategy.GenerateSignal(price);
 
@@ -67,6 +78,11 @@
                 };
             }
 
+            return GetCurrentTradeExecutionStatus();
+        }
+
+        private TradeExecutionResult GetCurrentTradeExecutionStatus()
+        {
             return new TradeExecutionResult()
             {
                 State = _currentContracts == 0 ? TradeState.Waiting : TradeState.Running
