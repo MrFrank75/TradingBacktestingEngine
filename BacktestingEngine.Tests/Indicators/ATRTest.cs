@@ -50,7 +50,8 @@
         }
 
         [Test]
-        [TestCase(10, 406.08, 20)]
+        [TestCase(10, 376.71, 10)]
+        [TestCase(10, 397.38, 11)]
         public void AverageTrueRangeRMACalculationResultsTest(int period, decimal expectedTR, int datasetSize)
         {
             var sut = new BacktestingEngine.Indicators.ATR(period);
