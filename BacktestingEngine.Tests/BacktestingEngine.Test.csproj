@@ -24,6 +24,13 @@
     <None Update="CsvDatabase\BINANCE BTCUSDT, 60.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="CsvDatabase\BINANCE MATICUSDT, 1D.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Strategies\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 ﻿using BacktestingEngine.Core;
-using BacktestingEngine.Core;
 
 namespace BacktestingEngine.Strategies
 {

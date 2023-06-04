@@ -1,4 +1,5 @@
-﻿namespace BacktestingEngine.Test.Strategies
+﻿
+namespace BacktestingEngine.Test.Indicators
 {
     public class RMATest
     {
@@ -62,7 +63,7 @@
             List<decimal> src = new List<decimal> { 1, 2 };
 
             // Act
-            decimal result = Indicators.SMA.Calculate(src);
+            decimal result = BacktestingEngine.Indicators.SMA.Calculate(src);
 
             // Assert
             Assert.That((double)result, Is.EqualTo((double)1.5M).Within(0.0001));

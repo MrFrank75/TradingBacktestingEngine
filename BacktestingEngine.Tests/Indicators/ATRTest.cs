@@ -1,4 +1,4 @@
-﻿namespace BacktestingEngine.Test.Strategies
+﻿namespace BacktestingEngine.Test.Indicators
 {
     public class ATRTest
     {
@@ -60,7 +60,7 @@
             var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(datasetSize).ToList();
 
-            var result = sut.CalculateAverageTrueRange(initialDataSet,Indicators.SmoothingType.RMA);
+            var result = sut.CalculateAverageTrueRange(initialDataSet,BacktestingEngine.Indicators.SmoothingType.RMA);
 
             Assert.AreEqual(expectedTR, Math.Round(result, 2));
         }
