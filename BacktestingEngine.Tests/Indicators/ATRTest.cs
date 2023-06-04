@@ -48,5 +48,20 @@
 
             Assert.AreEqual(expectedTR, Math.Round(result, 2));
         }
+
+        [Test]
+        [TestCase(10, 406.08, 20)]
+        public void AverageTrueRangeRMACalculationResultsTest(int period, decimal expectedTR, int datasetSize)
+        {
+            var sut = new BacktestingEngine.Indicators.ATR(period);
+
+            var pricesReader = new BacktestingEngine.Core.PricesReader();
+            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();
+            var initialDataSet = priceCandlesticks.Take(datasetSize).ToList();
+
+            var result = sut.CalculateAverageTrueRange(initialDataSet,Indicators.SmoothingType.RMA);
+
+            Assert.AreEqual(expectedTR, Math.Round(result, 2));
+        }
     }
 }

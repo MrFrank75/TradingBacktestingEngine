@@ -9,6 +9,8 @@ namespace BacktestingEngine.Strategies
     {
         private decimal multiplier;
         private int period;
+        private readonly decimal kcMultiplier;
+        private readonly int kcPeriod;
         private decimal[] upperBand = new decimal[2];
         private decimal[] lowerBand = new decimal[2];
         private decimal[] superTrend = new decimal[2];
@@ -16,23 +18,25 @@ namespace BacktestingEngine.Strategies
         private Candlestick previousCandle = new Candlestick { Close = decimal.MinValue};
         private readonly ATR atrCalculator;
         private long iterations = 0;
-        private List<Candlestick> latestCandlesticks = new List<Candlestick>();
+        private List<Candlestick> prices = new List<Candlestick>();
         private int CURRENT = 0;
         private int PREVIOUS = 1;
         private Trend previousTrend = Trend.None;
 
 
-        public SupertrendStrategy(decimal multiplier, int period)
+        public SupertrendStrategy(decimal stMultiplier, int stPeriod, decimal kcMultiplier, int kcPeriod)
         {
-            this.multiplier = multiplier;
-            this.period = period;
-            this.atrCalculator = new ATR(period);
+            this.multiplier = stMultiplier;
+            this.period = stPeriod;
+            this.kcMultiplier = kcMultiplier;
+            this.kcPeriod = kcPeriod;
+            this.atrCalculator = new ATR(stPeriod);
         }
 
         public Tuple<TradingSignal,decimal> GenerateSignal(Candlestick candle)
         {
             iterations++;
-            latestCandlesticks.Add(candle);
+            prices.Add(candle);
 
             if (iterations < period)
             {
@@ -40,7 +44,9 @@ namespace BacktestingEngine.Strategies
                 return new Tuple<TradingSignal, decimal>(TradingSignal.None, superTrend[CURRENT]);
             }
 
-            var ema100 = EMA.Calculate(latestCandlesticks,100);
+            var ema100 = EMA.Calculate(prices,100);
+            var ema200 = EMA.Calculate(prices,200);
+            KeltnerChannel kcResult = KeltnerChannel.Calculate(prices, period: kcPeriod, multiplier: kcMultiplier);
 
             bool trendHasChangedToDown, trendHasChangedToUp;
             CalculateSuperTrend(candle, out trendHasChangedToDown, out trendHasChangedToUp);
@@ -63,7 +69,7 @@ namespace BacktestingEngine.Strategies
             decimal hl2 = (candle.High + candle.Low) / 2;
 
             // Calculate the Average True Range (ATR)
-            atrValues[CURRENT] = Math.Round(atrCalculator.CalculateAverageTrueRange(latestCandlesticks, SmoothingType.RMA), 2);
+            atrValues[CURRENT] = Math.Round(atrCalculator.CalculateAverageTrueRange(prices, SmoothingType.RMA), 2);
             var atr = atrValues[CURRENT];
 
             upperBand[CURRENT] = hl2 + multiplier * atr;

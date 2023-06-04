@@ -18,9 +18,10 @@ namespace BacktestingEngine.Test.Strategies
         [TestCase(19,TradingSignal.None, 47216.75)]
         [TestCase(20,TradingSignal.None, 47216.75)]
         [TestCase(21,TradingSignal.None, 47216.75)]
+        [TestCase(100,TradingSignal.None, 47216.75)]
         public void RunningStrategyForGivenPeriodWillProduceExpectedTrendValue(int numOfItems, TradingSignal expectedSignal, decimal expectedSuperTrend)
         {
-            var sut = new BacktestingEngine.Strategies.SupertrendStrategy(1,10);
+            var sut = new BacktestingEngine.Strategies.SupertrendStrategy(1,10,2,20);
 
             var pricesReader = new Core.PricesReader();
             var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();

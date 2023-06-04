@@ -4,7 +4,7 @@ namespace BacktestingEngine.Strategies
 {
     internal class TripleSupertrendStrategy : IStrategy
     {
-        SupertrendStrategy stStrategy1 = new SupertrendStrategy(3, 10);
+        SupertrendStrategy stStrategy1 = new SupertrendStrategy(3, 10, 2,20);
         public TripleSupertrendStrategy()
         {
         }
