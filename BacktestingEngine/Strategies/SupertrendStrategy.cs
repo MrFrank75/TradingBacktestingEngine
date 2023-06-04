@@ -33,7 +33,6 @@ namespace BacktestingEngine.Strategies
         {
             iterations++;
             latestCandlesticks.Add(candle);
-            decimal hl2 = (candle.High+candle.Low)/2;
 
             if (iterations < period)
             {
@@ -41,8 +40,30 @@ namespace BacktestingEngine.Strategies
                 return new Tuple<TradingSignal, decimal>(TradingSignal.None, superTrend[CURRENT]);
             }
 
+            var ema100 = EMA.Calculate(latestCandlesticks,100);
+
+            bool trendHasChangedToDown, trendHasChangedToUp;
+            CalculateSuperTrend(candle, out trendHasChangedToDown, out trendHasChangedToUp);
+
+            TradingSignal tradingSignal = TradingSignal.None;
+            if (trendHasChangedToDown)
+            {
+                tradingSignal = TradingSignal.Sell;
+            }
+            else if (trendHasChangedToUp)
+            {
+                tradingSignal = TradingSignal.Buy;
+            }
+
+            return new Tuple<TradingSignal, decimal>(tradingSignal, superTrend[CURRENT]);
+        }
+
+        private void CalculateSuperTrend(Candlestick candle, out bool trendHasChangedToDown, out bool trendHasChangedToUp)
+        {
+            decimal hl2 = (candle.High + candle.Low) / 2;
+
             // Calculate the Average True Range (ATR)
-            atrValues[CURRENT] = Math.Round(atrCalculator.CalculateAverageTrueRange(latestCandlesticks,SmoothingType.RMA),2);
+            atrValues[CURRENT] = Math.Round(atrCalculator.CalculateAverageTrueRange(latestCandlesticks, SmoothingType.RMA), 2);
             var atr = atrValues[CURRENT];
 
             upperBand[CURRENT] = hl2 + multiplier * atr;
@@ -53,9 +74,12 @@ namespace BacktestingEngine.Strategies
 
             var currentTrend = Trend.None;
             var prevSuperTrend = superTrend[PREVIOUS];
-            if (atrValues[PREVIOUS] == 0) {
+            if (atrValues[PREVIOUS] == 0)
+            {
                 currentTrend = Trend.Down;
-            } else if (prevSuperTrend == upperBand[PREVIOUS]) {
+            }
+            else if (prevSuperTrend == upperBand[PREVIOUS])
+            {
                 currentTrend = candle.Close > upperBand[CURRENT] ? Trend.Up : Trend.Down;
             }
             else
@@ -63,16 +87,16 @@ namespace BacktestingEngine.Strategies
             superTrend[CURRENT] = currentTrend == Trend.Up ? lowerBand[CURRENT] : upperBand[CURRENT];
 
 
-            var tradingSignal = TradingSignal.None;
-            if (previousTrend == Trend.Up && candle.Close< superTrend[CURRENT])
+            trendHasChangedToDown = previousTrend == Trend.Up && candle.Close < superTrend[CURRENT];
+            if (trendHasChangedToDown)
             {
                 currentTrend = Trend.Down;
-                tradingSignal = TradingSignal.Sell;
             }
-            else if (previousTrend == Trend.Down && candle.Close > superTrend[CURRENT])
+
+            trendHasChangedToUp = previousTrend == Trend.Down && candle.Close > superTrend[CURRENT];
+            if (trendHasChangedToUp)
             {
                 currentTrend = Trend.Up;
-                tradingSignal = TradingSignal.Buy;
             }
 
             //prepare everything for the next iteration
@@ -82,11 +106,7 @@ namespace BacktestingEngine.Strategies
             lowerBand[PREVIOUS] = lowerBand[CURRENT];
             previousCandle = candle;
             previousTrend = currentTrend;
-
-
-            return new Tuple<TradingSignal, decimal>(tradingSignal, superTrend[CURRENT]);
         }
-
 
     }
 }
