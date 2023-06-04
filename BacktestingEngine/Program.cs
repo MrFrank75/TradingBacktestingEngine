@@ -10,22 +10,33 @@ namespace BacktestingEngine
             //read the data and place them in a vector
             var pricesReader = new PricesReader();
 
-            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE","ETCUSDT","240").ToList();
+            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE","MATICUSDT","1D").ToList();
+
 
             var tradesExecutionReport = new List<TradeExecutionResult>();
-            var strategyToExecute = new TripleSupertrendStrategy();
+            TradeExecutionResult pendingTrade = new TradeExecutionResult();
+            
             var dateFilter = new DateFilter(new DateTime(2019, 1, 1), new DateTime(2023, 1, 1));
+            var strategyToExecute = new TripleSupertrendStrategy(dateFilter);
 
             IStrategyExecutionEngine strategyEngine = new GenericTradingViewStrategyEngine(priceCandlesticks, strategyToExecute, dateFilter);
 
             foreach (var price in priceCandlesticks)
             {
                 TradeExecutionResult singleTradeExecutionResult = strategyEngine.ExecuteStrategy(price);
+
+                if (singleTradeExecutionResult.State == TradeState.Opened)
+                {
+                    pendingTrade = singleTradeExecutionResult;
+                }
+
                 if (singleTradeExecutionResult.State == TradeState.Closed)
                 {
                     tradesExecutionReport.Add(singleTradeExecutionResult);
                 }
             }
+
+            tradesExecutionReport.Add(pendingTrade);
 
             var strategySummaryReport = strategyEngine.GetSummaryReport();
 

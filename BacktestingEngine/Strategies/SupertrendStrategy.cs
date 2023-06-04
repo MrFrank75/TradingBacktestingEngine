@@ -11,6 +11,7 @@ namespace BacktestingEngine.Strategies
         private int period;
         private readonly decimal kcMultiplier;
         private readonly int kcPeriod;
+        private readonly IFilter filter;
         private decimal[] upperBand = new decimal[2];
         private decimal[] lowerBand = new decimal[2];
         private decimal[] superTrend = new decimal[2];
@@ -32,12 +33,13 @@ namespace BacktestingEngine.Strategies
         private bool _exitCondition1 = false;
         private bool _exitCondition2 = false;
 
-        public SupertrendStrategy(decimal stMultiplier, int stPeriod, decimal kcMultiplier, int kcPeriod)
+        public SupertrendStrategy(decimal stMultiplier, int stPeriod, decimal kcMultiplier, int kcPeriod, IFilter filter)
         {
             this.multiplier = stMultiplier;
             this.period = stPeriod;
             this.kcMultiplier = kcMultiplier;
             this.kcPeriod = kcPeriod;
+            this.filter = filter;
             this.atrCalculator = new ATR(stPeriod);
         }
 
@@ -57,6 +59,10 @@ namespace BacktestingEngine.Strategies
             KeltnerChannel kcResult = KeltnerChannel.Calculate(prices, period: kcPeriod, multiplier: kcMultiplier);
             bool trendHasChangedToDown, trendHasChangedToUp;
             CalculateSuperTrend(candle, out trendHasChangedToDown, out trendHasChangedToUp);
+
+            if (filter.FilterPrice(candle) == null)
+                return new Tuple<TradingSignal, decimal>(TradingSignal.None, 0);
+
 
             if (trendHasChangedToUp)
             {

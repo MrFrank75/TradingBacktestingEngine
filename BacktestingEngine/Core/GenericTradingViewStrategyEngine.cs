@@ -33,13 +33,6 @@ namespace BacktestingEngine.Core
         public TradeExecutionResult ExecuteStrategy(Candlestick price)
         {
 
-            var filteredPrice = _filter.FilterPrice(price);
-            if (filteredPrice == null)
-            {
-                return GetCurrentTradeExecutionStatus();
-            }
-
-
             var signal = _strategy.GenerateSignal(price);
 
             if (signal == Core.TradingSignal.Buy && _currentStrategyState == TradeState.Waiting)

@@ -4,9 +4,13 @@ namespace BacktestingEngine.Strategies
 {
     internal class TripleSupertrendStrategy : IStrategy
     {
-        SupertrendStrategy stStrategy1 = new SupertrendStrategy(3, 10, 2,20);
-        public TripleSupertrendStrategy()
+        SupertrendStrategy stStrategy1;
+        private readonly IFilter filter;
+
+        public TripleSupertrendStrategy(IFilter filter)
         {
+            this.filter = filter;
+            stStrategy1 = new SupertrendStrategy(3, 10, 2, 20, filter);
         }
 
         public bool EvaluateCloseLongCondition(Candlestick price)

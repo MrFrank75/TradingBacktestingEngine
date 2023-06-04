@@ -34,6 +34,9 @@
     <None Update="CsvDatabase\BINANCE ETCUSDT, 240.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="CsvDatabase\BINANCE MATICUSDT, 1D.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
