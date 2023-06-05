@@ -37,7 +37,7 @@ namespace BacktestingEngine.Indicators
             decimal hl2 = (candle.High + candle.Low) / 2;
 
             // Calculate the Average True Range (ATR)
-            atrValues[CURRENT] = Math.Round(atrCalculator.CalculateAverageTrueRange(prices, SmoothingType.RMA), 2);
+            atrValues[CURRENT] = atrCalculator.CalculateAverageTrueRange(prices, SmoothingType.RMA);
             var atr = atrValues[CURRENT];
 
             if (prices.Count >= period)

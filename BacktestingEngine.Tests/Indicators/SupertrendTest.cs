@@ -35,6 +35,8 @@ namespace BacktestingEngine.Test.Indicators
 
         [Test]
         [TestCase(10, 0.0083)]
+        [TestCase(11, 0.0079)]
+        [TestCase(18, 0.0030)]
         public void SupertrendMATIC_ReturnsExpectedValues(int numOfItems, decimal expectedSuperTrend)
         {
             var sut = new BacktestingEngine.Indicators.Supertrend(10, 3);
