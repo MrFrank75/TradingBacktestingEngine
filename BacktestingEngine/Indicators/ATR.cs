@@ -5,12 +5,10 @@ namespace BacktestingEngine.Indicators
     public class ATR
     {
         private readonly int _period;
-        private readonly RMA _rmaSmoother;
 
         public ATR(int period)
         {
             _period = period;
-            _rmaSmoother = new RMA(period);
         }
 
         public decimal CalculateTrueRange(List<Candlestick> candles)
@@ -32,15 +30,12 @@ namespace BacktestingEngine.Indicators
         {
             var trueRangeValues = new List<decimal>();
             if (candles.Count < _period)
-                return Decimal.MinValue;
+                return 0;
 
-            var trCandles = candles.Skip(candles.Count-_period);
-
-            foreach (var candle in trCandles)
+            foreach (var candle in candles)
             {
                 var listOfCandles = StrategyHelper.GetElementsUntilAndIncluding<Candlestick>(candles, candle);
                 var tr = CalculateTrueRange(listOfCandles);
-                // Add the True Range value to the list
                 trueRangeValues.Add(tr);
             }
 
@@ -54,7 +49,7 @@ namespace BacktestingEngine.Indicators
                 case SmoothingType.SMA:
                     return SMA.Calculate(values);
                 case SmoothingType.RMA:
-                    return _rmaSmoother.Calculate(values);
+                    return new RMA(_period).Calculate(values);
                 default:
                     throw new ArgumentException();
             }
