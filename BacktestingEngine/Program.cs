@@ -42,6 +42,7 @@ namespace BacktestingEngine
                 if (counter % tick == 0)
                     Console.Write("=");
             }
+            Console.WriteLine("| DONE");
 
             tradesExecutionReport.Add(pendingTrade);
 
@@ -55,7 +56,7 @@ namespace BacktestingEngine
         public static void PrintExecutionResults(List<TradeExecutionResult> results)
         {
             Console.WriteLine("{0,-5}{1,-10}{2,-10}{3,-15}{4,-25}{5,-25}{6,-14:N2}{7,-14:N2}{8,-10:N5}",
-                              "#", "State", "Profit", "Current Capital", "Opening Date Time",
+                              "#", "State", "Profit", "Equity", "Opening Date Time",
                               "Closing Date Time", "Opening Price", "Closing Price", "Contracts");
             int counter = 0;
             foreach (var result in results)

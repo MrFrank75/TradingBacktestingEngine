@@ -24,6 +24,8 @@ namespace BacktestingEngine.Strategies
         private bool _condition1_EntryBullMarket = false;
         private bool _exitCondition1 = false;
         private bool _exitCondition2 = false;
+        private bool _exitConditionSupertrendBroken = false;
+        private TradingSignal _lastTradingSignalReleased = TradingSignal.None;
 
         public SupertrendStrategy(decimal stMultiplier, int stPeriod, decimal kcMultiplier, int kcPeriod, IFilter filter)
         {
@@ -41,23 +43,23 @@ namespace BacktestingEngine.Strategies
             iterations++;
             prices.Add(candle);
 
-            var ema100 = EMA.Calculate(prices,100);
-            var ema200 = EMA.Calculate(prices,200);
-            KeltnerChannel kcResult = KeltnerChannel.Calculate(prices, period: kcPeriod, multiplier: kcMultiplier);
-            var result = supertrendIndicator.CalculateSuperTrend(candle);
-
             if (filter.FilterPrice(candle) == null)
                 return new Tuple<TradingSignal, decimal>(TradingSignal.None, 0);
 
+            var ema100 = EMA.Calculate(prices, 100);
+            var ema200 = EMA.Calculate(prices, 200);
+            KeltnerChannel kcResult = KeltnerChannel.Calculate(prices, period: kcPeriod, multiplier: kcMultiplier);
+            SupertrendResult supertrendValue = supertrendIndicator.CalculateSuperTrend(candle);
 
-            if (result.CurrentTrend == Trend.Up && result.TrendHasChanged)
+
+            if (supertrendValue.CurrentTrend == Trend.Up && supertrendValue.TrendHasChanged)
             {
                 _trendingPositive= true;
                 _trendingNegative = false;
                 _kcPivotLong = kcResult.Upper;
             }
 
-            if (result.CurrentTrend == Trend.Down && result.TrendHasChanged)
+            if (supertrendValue.CurrentTrend == Trend.Down && supertrendValue.TrendHasChanged)
             {
                 _trendingPositive = false;
                 _trendingNegative = true;
@@ -79,30 +81,43 @@ namespace BacktestingEngine.Strategies
             }
 
 
-            //EXIT CONDITIONS
-            if (candle.Close>kcResult.Upper && candle.Open>kcResult.Upper)
+            //EXIT CONDITIONS TO EVALUATE IF WE ARE IN A TRADE
+            if (_lastTradingSignalReleased == TradingSignal.Buy)
             {
-                _exitCondition1 = true;
+                if (candle.Close > kcResult.Upper && candle.Open > kcResult.Upper)
+                {
+                    _exitCondition1 = true;
+                }
+
+                if (_exitCondition1 && candle.Close < kcResult.Middle)
+                {
+                    _exitCondition2 = true;
+                }
+
+                if (candle.Close < supertrendValue.Value)
+                {
+                    _exitConditionSupertrendBroken = true;
+                }
             }
-
-            if (_exitCondition1 && candle.Close < kcResult.Middle) {
-                _exitCondition2 = true;
-            }
-
-
+            
             TradingSignal tradingSignal = TradingSignal.None;
-            if (_exitCondition1 && _exitCondition2)
+            if (_lastTradingSignalReleased==TradingSignal.Buy 
+                && ( (_exitCondition1 && _exitCondition2) || _exitConditionSupertrendBroken))
             {
                 tradingSignal = TradingSignal.Sell;
+                _lastTradingSignalReleased= tradingSignal;
                 _exitCondition1 = false;
                 _exitCondition2= false;
+                _exitConditionSupertrendBroken= false;
                 _condition1_EntryBearMarket = false;
                 _condition2_EntryBearMarket=false;
                 _condition1_EntryBullMarket=false;
             }
-            else if (_condition1_EntryBullMarket || (_condition1_EntryBearMarket && _condition2_EntryBearMarket))
+            else if ((_lastTradingSignalReleased == TradingSignal.Sell || _lastTradingSignalReleased == TradingSignal.None)
+                && (_condition1_EntryBullMarket || (_condition1_EntryBearMarket && _condition2_EntryBearMarket)))
             {
                 tradingSignal = TradingSignal.Buy;
+                _lastTradingSignalReleased= tradingSignal;
             }
 
             return new Tuple<TradingSignal, decimal>(tradingSignal,0);
