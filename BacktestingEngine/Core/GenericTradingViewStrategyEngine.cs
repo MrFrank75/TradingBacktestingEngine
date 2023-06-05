@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-
-namespace BacktestingEngine.Core
+﻿namespace BacktestingEngine.Core
 {
     internal class GenericTradingViewStrategyEngine : IStrategyExecutionEngine
     {
@@ -9,7 +6,6 @@ namespace BacktestingEngine.Core
         private const decimal MakerFee = 0.02M / 100M;
         private const decimal TakerFee = 0.04M / 100M;
 
-        private List<Candlestick> _priceCandlesticks;
         private readonly IStrategy _strategy;
         private readonly IFilter _filter;
         private decimal _percentageUsedForTrade = 100;
@@ -22,9 +18,8 @@ namespace BacktestingEngine.Core
         private DateTime _openingDateTime;
         private decimal _currentContracts;
 
-        public GenericTradingViewStrategyEngine(List<Candlestick> pricesVector, IStrategy strategyToExecute, IFilter filter)
+        public GenericTradingViewStrategyEngine(IStrategy strategyToExecute, IFilter filter)
         {
-            _priceCandlesticks = pricesVector;
             _strategy = strategyToExecute;
             _filter = filter;
             _currentStrategyState = TradeState.Waiting;

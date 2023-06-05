@@ -12,7 +12,7 @@ namespace BacktestingEngine.Strategies
             double[] emaValues = new double[closePrices.Length];
             int validIndex = candlesticks.Count - period;
             TicTacTec.TA.Library.Core.RetCode ema100Result = TicTacTec.TA.Library.Core.Ema(0, candlesticks.Count - 1, closePrices, period, out outBegIdx, out outNbElement, emaValues);
-            if (ema100Result == TicTacTec.TA.Library.Core.RetCode.Success)
+            if (ema100Result == TicTacTec.TA.Library.Core.RetCode.Success && candlesticks.Count>=period)
             {
                 return (decimal)emaValues[validIndex];
             }
