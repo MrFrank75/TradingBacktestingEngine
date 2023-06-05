@@ -101,8 +101,7 @@ namespace BacktestingEngine.Strategies
             }
             
             TradingSignal tradingSignal = TradingSignal.None;
-            if (_lastTradingSignalReleased==TradingSignal.Buy 
-                && ( (_exitCondition1 && _exitCondition2) || _exitConditionSupertrendBroken))
+            if ((_exitCondition1 && _exitCondition2) || _exitConditionSupertrendBroken)
             {
                 tradingSignal = TradingSignal.Sell;
                 _lastTradingSignalReleased= tradingSignal;
@@ -113,8 +112,7 @@ namespace BacktestingEngine.Strategies
                 _condition2_EntryBearMarket=false;
                 _condition1_EntryBullMarket=false;
             }
-            else if ((_lastTradingSignalReleased == TradingSignal.Sell || _lastTradingSignalReleased == TradingSignal.None)
-                && (_condition1_EntryBullMarket || (_condition1_EntryBearMarket && _condition2_EntryBearMarket)))
+            else if (_condition1_EntryBullMarket || (_condition1_EntryBearMarket && _condition2_EntryBearMarket))
             {
                 tradingSignal = TradingSignal.Buy;
                 _lastTradingSignalReleased= tradingSignal;
