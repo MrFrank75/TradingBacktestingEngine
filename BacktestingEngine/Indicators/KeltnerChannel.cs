@@ -18,7 +18,7 @@ namespace BacktestingEngine.Strategies
 
             // Calculate EMA
             decimal emaValue = EMA.Calculate(prices, period);
-            decimal atrValue = new ATR(atrPeriod).CalculateAverageTrueRange(prices);
+            decimal atrValue = new ATR(atrPeriod).CalculateAverageTrueRange(prices, SmoothingType.RMA);
 
             decimal upperValue = emaValue + (multiplier * atrValue);
             decimal lowerValue = emaValue - (multiplier * atrValue);

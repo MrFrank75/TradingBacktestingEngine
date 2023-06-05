@@ -10,7 +10,8 @@ namespace BacktestingEngine.Test.Strategies
         }
 
         [Test]
-        [TestCase(20,20,2, 47862.88, 46319.60,47091.24)]
+        [TestCase(20,20,2, 47871.75, 46247.44,47059.60)]
+        [TestCase(21,20,2, 47883.94, 46298.53,47091.24)]
 
         public void KeltnerChannelCalculationTest(int numOfSamples,int period,decimal multiplier,decimal expectedUpper, decimal expectedLower, decimal expectedMiddle)
         {

@@ -35,6 +35,7 @@
         [TestCase(10, 376.71, 10)]
         [TestCase(10, 397.38, 11)]
         [TestCase(10, 382.74, 12)]
+        [TestCase(10, 406.08, 20)]
 
         public void ReturnsExpectedResultUsingRMASmoothingTest(int period, decimal expectedTR, int datasetSize)
         {
@@ -46,7 +47,7 @@
 
             var result = sut.CalculateAverageTrueRange(initialDataSet,BacktestingEngine.Indicators.SmoothingType.RMA);
 
-            Assert.AreEqual(expectedTR, Math.Round(result, 2));
+            Assert.That(Math.Round(result, 2), Is.EqualTo(expectedTR));
         }
 
         [Test]
