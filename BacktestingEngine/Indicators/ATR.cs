@@ -47,7 +47,7 @@ namespace BacktestingEngine.Indicators
             switch (smoothingType)
             {
                 case SmoothingType.SMA:
-                    return SMA.Calculate(values);
+                    return SMA.Calculate(values.TakeLast(_period).ToList());
                 case SmoothingType.RMA:
                     return new RMA(_period).Calculate(values);
                 default:
