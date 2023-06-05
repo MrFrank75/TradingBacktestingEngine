@@ -11,16 +11,17 @@ namespace BacktestingEngine.Indicators
             _period = period;
         }
 
-        public decimal CalculateTrueRange(List<Candlestick> candles)
+        public decimal CalculateTrueRange(Candlestick current, Candlestick? previous)
         {
-            Candlestick lastCandle= candles.Last();
-            decimal highMinusLow = lastCandle.High - lastCandle.Low;
+            decimal highMinusLow = current.High - current.Low;
 
-            if (candles.Count<2)
+            if (previous == null)
+            {
                 return highMinusLow;
+            }
 
-            decimal highMinusPreviousClose = Math.Abs(lastCandle.High - candles[candles.Count - 1].Close);
-            decimal lowMinusPreviousClose = Math.Abs(lastCandle.Low - candles[candles.Count - 1].Close);
+            decimal highMinusPreviousClose = Math.Abs(current.High - previous.Close);
+            decimal lowMinusPreviousClose = Math.Abs(current.Low - previous.Close);
 
             decimal trueRange = Math.Max(highMinusLow, Math.Max(highMinusPreviousClose, lowMinusPreviousClose));
             return trueRange;
@@ -34,8 +35,9 @@ namespace BacktestingEngine.Indicators
 
             foreach (var candle in candles)
             {
-                var listOfCandles = StrategyHelper.GetElementsUntilAndIncluding<Candlestick>(candles, candle);
-                var tr = CalculateTrueRange(listOfCandles);
+                int idxCurrentCandle = candles.IndexOf(candle);
+                Candlestick? previous = idxCurrentCandle >= 1 ? candles[candles.IndexOf(candle) - 1] : null;
+                var tr = CalculateTrueRange(candle, previous);
                 trueRangeValues.Add(tr);
             }
 

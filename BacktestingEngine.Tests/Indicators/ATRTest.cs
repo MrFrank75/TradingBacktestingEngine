@@ -22,7 +22,7 @@
             var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(period).ToList();
 
-            var result = sut.CalculateTrueRange(initialDataSet);
+            var result = sut.CalculateTrueRange(initialDataSet.Last(), initialDataSet[initialDataSet.Count - 1]);
 
             Assert.AreEqual(expectedTR, result);
         }
