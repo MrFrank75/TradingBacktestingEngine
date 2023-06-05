@@ -18,7 +18,7 @@ namespace BacktestingEngine.Test.Strategies
 
             var pricesReader = new BacktestingEngine.Core.PricesReader();
             var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();
-            var initialDataSet = priceCandlesticks.Take(numOfSamples).TakeLast(period).ToList();
+            var initialDataSet = priceCandlesticks.Take(numOfSamples).ToList();
 
             var result = KeltnerChannel.Calculate(initialDataSet,period, multiplier);
 
