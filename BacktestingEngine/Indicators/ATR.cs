@@ -33,7 +33,10 @@ namespace BacktestingEngine.Indicators
             if (candles.Count < _period)
                 return 0;
 
-            foreach (var candle in candles)
+            //TODO: ugly optimization trick that needs to be fixed
+            var neededCandles = candles.TakeLast(5*_period);
+
+            foreach (var candle in neededCandles)
             {
                 int idxCurrentCandle = candles.IndexOf(candle);
                 Candlestick? previous = idxCurrentCandle >= 1 ? candles[candles.IndexOf(candle) - 1] : null;

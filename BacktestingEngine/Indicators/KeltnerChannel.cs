@@ -1,5 +1,6 @@
 ﻿using BacktestingEngine.Core;
 using BacktestingEngine.Indicators;
+using System.Reflection.Metadata;
 
 namespace BacktestingEngine.Strategies
 {
@@ -17,8 +18,11 @@ namespace BacktestingEngine.Strategies
             decimal[] closePrices = prices.Select(p => p.Close).ToArray();
 
             // Calculate EMA
-            decimal emaValue = EMA.Calculate(prices, period);
-            decimal atrValue = new ATR(atrPeriod).CalculateAverageTrueRange(prices, SmoothingType.RMA);
+            //TODO: ugly optimization trick that needs to be fixed
+            var subset = prices.TakeLast(5 * period).ToList();
+
+            decimal emaValue = EMA.Calculate(subset, period);
+            decimal atrValue = new ATR(atrPeriod).CalculateAverageTrueRange(subset, SmoothingType.RMA);
 
             decimal upperValue = emaValue + (multiplier * atrValue);
             decimal lowerValue = emaValue - (multiplier * atrValue);
