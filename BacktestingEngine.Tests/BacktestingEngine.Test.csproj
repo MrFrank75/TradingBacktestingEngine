@@ -21,10 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="CsvDatabase\BINANCE BTCUSDT, 60.csv">
+    <None Update="CsvDatabase\TESTBROKER BTCUSDT, 60.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="CsvDatabase\BINANCE MATICUSDT, 1D.csv">
+    <None Update="CsvDatabase\TESTBROKER MATICUSDT, 1D.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

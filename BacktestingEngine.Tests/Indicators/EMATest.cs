@@ -22,7 +22,7 @@ namespace BacktestingEngine.Test.Strategies
         {
 
             var pricesReader = new BacktestingEngine.Core.PricesReader();
-            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();
+            var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(datasetSize).ToList();
 
             var result = EMA.Calculate(initialDataSet, period);

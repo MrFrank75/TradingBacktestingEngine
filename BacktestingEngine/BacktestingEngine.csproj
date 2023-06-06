@@ -28,13 +28,34 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="CsvDatabase\BINANCE BTCUSDT, 60.csv">
+    <None Update="CsvDatabase\TESTBROKER ADAUSDT, 240.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="CsvDatabase\BINANCE ETCUSDT, 240.csv">
+    <None Update="CsvDatabase\TESTBROKER ATOMUSDT, 240.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="CsvDatabase\BINANCE MATICUSDT, 1D.csv">
+    <None Update="CsvDatabase\TESTBROKER BTCUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER BTCUSDT, 60.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER DASHUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER DOTUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER ETCUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER LINKUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER LTCUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER MATICUSDT, 1D.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

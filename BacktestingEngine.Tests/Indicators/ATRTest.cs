@@ -19,7 +19,7 @@
             var sut = new BacktestingEngine.Indicators.ATR(period);
 
             var pricesReader = new BacktestingEngine.Core.PricesReader();
-            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();
+            var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(period).ToList();
 
             var result = sut.CalculateTrueRange(initialDataSet.Last(), initialDataSet[initialDataSet.Count - 1]);
@@ -42,7 +42,7 @@
             var sut = new BacktestingEngine.Indicators.ATR(period);
 
             var pricesReader = new BacktestingEngine.Core.PricesReader();
-            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();
+            var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(datasetSize).ToList();
 
             var result = sut.CalculateAverageTrueRange(initialDataSet,BacktestingEngine.Indicators.SmoothingType.RMA);
@@ -59,7 +59,7 @@
             var sut = new BacktestingEngine.Indicators.ATR(period);
 
             var pricesReader = new BacktestingEngine.Core.PricesReader();
-            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();
+            var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(datasetSize).ToList();
 
             var result = sut.CalculateAverageTrueRange(initialDataSet,BacktestingEngine.Indicators.SmoothingType.SMA);

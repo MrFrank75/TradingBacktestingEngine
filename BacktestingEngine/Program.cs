@@ -10,7 +10,7 @@ namespace BacktestingEngine
             //read the data and place them in a vector
             var pricesReader = new PricesReader();
 
-            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE","ETCUSDT","240").ToList();
+            var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER","ETCUSDT","240").ToList();
 
 
             var tradesExecutionReport = new List<TradeExecutionResult>();

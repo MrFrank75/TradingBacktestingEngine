@@ -20,7 +20,7 @@ namespace BacktestingEngine.Test.Indicators
             var sut = new BacktestingEngine.Indicators.Supertrend(10, 3);
 
             var pricesReader = new PricesReader();
-            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "BTCUSDT", "60").ToList();
+            var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(numOfItems).ToList();
 
             SupertrendResult result = new SupertrendResult();
@@ -42,7 +42,7 @@ namespace BacktestingEngine.Test.Indicators
             var sut = new BacktestingEngine.Indicators.Supertrend(10, 3);
 
             var pricesReader = new PricesReader();
-            var priceCandlesticks = pricesReader.ReadPricesVector("BINANCE", "MATICUSDT", "1D").ToList();
+            var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "MATICUSDT", "1D").ToList();
             var initialDataSet = priceCandlesticks.Take(numOfItems).ToList();
             
             SupertrendResult result = new SupertrendResult();
