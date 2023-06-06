@@ -2,8 +2,11 @@
 {
     public class BacktestReport
     {
+        public string Ticker { get; set; }
         public decimal StartingCapital { get; set; }
         public decimal EndingCapital { get; set; }
+        public decimal Gain{ get; set; }
+        public decimal GainPerc { get; set; }
         public decimal NetProfit { get; set; }
         public decimal GrossProfit { get; set; }
         public decimal GrossLoss { get; set; }

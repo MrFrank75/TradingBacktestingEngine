@@ -8,6 +8,7 @@
 
         private readonly IStrategy _strategy;
         private readonly IFilter _filter;
+        private readonly string _ticker;
         private decimal _percentageUsedForTrade = 100;
         private decimal _currentCapital = initialCapitalUSD;
 
@@ -19,15 +20,16 @@
         private decimal _currentContracts;
         private List<TradeExecutionResult> _executedTrades;
 
-        public GenericTradingViewStrategyEngine(IStrategy strategyToExecute, IFilter filter)
+        public GenericTradingViewStrategyEngine(IStrategy strategyToExecute, IFilter filter, string ticker)
         {
             _strategy = strategyToExecute;
             _filter = filter;
+            _ticker = ticker;
             _currentStrategyState = TradeState.Waiting;
             _executedTrades = new List<TradeExecutionResult>();
         }
 
-        public TradeExecutionResult ExecuteStrategy(string ticker, Candlestick price)
+        public TradeExecutionResult ExecuteStrategy(Candlestick price)
         {
 
             var signal = _strategy.GenerateSignal(price);
@@ -42,7 +44,7 @@
                 _currentStrategyState = TradeState.Running;
                 return new TradeExecutionResult()
                 {
-                    Ticker = ticker,
+                    Ticker = _ticker,
                     OpeningDateTime = _openingDateTime,
                     State = TradeState.Opened
                 };
@@ -59,7 +61,7 @@
                 _currentStrategyState = TradeState.Waiting;
                 var tradeResult = new TradeExecutionResult()
                 {
-                    Ticker = ticker,
+                    Ticker = _ticker,
                     OpeningDateTime = _openingDateTime,
                     ClosingDateTime = price.Time,
                     OpeningPrice = _openingPrice,
@@ -92,8 +94,11 @@
 
             return new BacktestReport()
             {
+                Ticker = _ticker,
                 StartingCapital = initialCapitalUSD,
                 EndingCapital = Math.Round(_currentCapital,2),
+                Gain = Math.Round(_currentCapital-initialCapitalUSD,2),
+                GainPerc = Math.Round((_currentCapital - initialCapitalUSD) /initialCapitalUSD*100,2),
                 MaxDrawdown = Math.Round(maxDrawdown,2),
                 MaxDrawdownPercent = Math.Round((maxDrawdown/initialCapitalUSD*100.0M),2)
             };
