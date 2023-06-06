@@ -2,7 +2,7 @@
 {
     internal interface IStrategyExecutionEngine
     {
-        TradeExecutionResult ExecuteStrategy(Candlestick price);
+        TradeExecutionResult ExecuteStrategy(string ticker, Candlestick price);
         BacktestReport GetSummaryReport();
     }
 }

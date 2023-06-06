@@ -17,29 +17,32 @@
         private decimal _openingPrice;
         private DateTime _openingDateTime;
         private decimal _currentContracts;
+        private List<TradeExecutionResult> _executedTrades;
 
         public GenericTradingViewStrategyEngine(IStrategy strategyToExecute, IFilter filter)
         {
             _strategy = strategyToExecute;
             _filter = filter;
             _currentStrategyState = TradeState.Waiting;
+            _executedTrades = new List<TradeExecutionResult>();
         }
 
-        public TradeExecutionResult ExecuteStrategy(Candlestick price)
+        public TradeExecutionResult ExecuteStrategy(string ticker, Candlestick price)
         {
 
             var signal = _strategy.GenerateSignal(price);
+            var nominalBuyOrderSize = _currentCapital * _percentageUsedForTrade / 100;
 
             if (signal == Core.TradingSignal.Buy && _currentStrategyState == TradeState.Waiting)
             {
-                var nominalOrderSize = _currentCapital * _percentageUsedForTrade / 100;
-                _currentPositionSize = nominalOrderSize - nominalOrderSize * MakerFee;
+                _currentPositionSize = nominalBuyOrderSize - nominalBuyOrderSize * MakerFee;
                 _openingPrice = price.Close;
                 _openingDateTime = price.Time;
                 _currentContracts = _currentPositionSize / price.Close;
                 _currentStrategyState = TradeState.Running;
                 return new TradeExecutionResult()
                 {
+                    Ticker = ticker,
                     OpeningDateTime = _openingDateTime,
                     State = TradeState.Opened
                 };
@@ -47,23 +50,28 @@
 
             if (signal == Core.TradingSignal.Sell && _currentStrategyState == TradeState.Running)
             {
-                decimal nominalSellOrderSize = _currentContracts * price.Close;
                 var contractsHeld = _currentContracts;
-                var profit = nominalSellOrderSize - nominalSellOrderSize * TakerFee - _currentContracts * _openingPrice;
+                var nominalSellOrderSize = _currentContracts * price.Close;
+                var profit = nominalSellOrderSize - nominalSellOrderSize * TakerFee - nominalBuyOrderSize;
+                var profitPercentage = Math.Round(profit / nominalBuyOrderSize * 100.0M, 2);
                 _currentCapital = _currentCapital + profit;
                 _currentContracts = 0;
                 _currentStrategyState = TradeState.Waiting;
-                return new TradeExecutionResult()
+                var tradeResult = new TradeExecutionResult()
                 {
+                    Ticker = ticker,
                     OpeningDateTime = _openingDateTime,
                     ClosingDateTime = price.Time,
                     OpeningPrice = _openingPrice,
                     ClosingPrice = price.Close,
                     Contracts = contractsHeld,
-                    Profit = profit,
+                    Gain = profit,
+                    GainPerc = profitPercentage,
                     CurrentCapital = _currentCapital,
                     State = TradeState.Closed
                 };
+                _executedTrades.Add(tradeResult);
+                return tradeResult;
             }
 
             return GetCurrentTradeExecutionStatus();
@@ -79,13 +87,27 @@
 
         public BacktestReport GetSummaryReport()
         {
+            //calculate max drawdown
+            var maxDrawdown = GetMaxDrawDown(_executedTrades);
+
             return new BacktestReport()
             {
                 StartingCapital = initialCapitalUSD,
-                EndingCapital = _currentCapital
+                EndingCapital = Math.Round(_currentCapital,2),
+                MaxDrawdown = Math.Round(maxDrawdown,2),
+                MaxDrawdownPercent = Math.Round((maxDrawdown/initialCapitalUSD*100.0M),2)
             };
         }
 
-
+        private decimal GetMaxDrawDown(List<TradeExecutionResult> executedTrades)
+        {
+            var minEquityValue = Decimal.MaxValue;
+            foreach (var item in executedTrades)
+            {
+                if (item.CurrentCapital < minEquityValue)
+                    minEquityValue = item.CurrentCapital;
+            }
+            return initialCapitalUSD - minEquityValue;
+        }
     }
 }
