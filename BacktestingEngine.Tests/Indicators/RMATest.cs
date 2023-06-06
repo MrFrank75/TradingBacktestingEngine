@@ -1,4 +1,6 @@
 ﻿
+using BacktestingEngine.Core;
+
 namespace BacktestingEngine.Test.Indicators
 {
     public class RMATest
@@ -17,7 +19,7 @@ namespace BacktestingEngine.Test.Indicators
         [TestCase(10, 15, 46939.60)]
         public void RMAResultsTest(int period, int datasetSize, decimal expectedRMA)
         {
-            var pricesReader = new BacktestingEngine.Core.PricesReader();
+            var pricesReader = new BacktestingEngine.Core.CsvReader<Candlestick>();
             var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(datasetSize).ToList();
 

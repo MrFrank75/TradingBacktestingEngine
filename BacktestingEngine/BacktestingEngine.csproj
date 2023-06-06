@@ -58,6 +58,9 @@
     <None Update="CsvDatabase\TESTBROKER MATICUSDT, 1D.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TradeSetupConfiguration\SupertrendSetup.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

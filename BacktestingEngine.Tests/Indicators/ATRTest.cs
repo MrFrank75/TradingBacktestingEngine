@@ -1,4 +1,6 @@
-﻿namespace BacktestingEngine.Test.Indicators
+﻿using BacktestingEngine.Core;
+
+namespace BacktestingEngine.Test.Indicators
 {
     public class ATRTest
     {
@@ -18,7 +20,7 @@
         {
             var sut = new BacktestingEngine.Indicators.ATR(period);
 
-            var pricesReader = new BacktestingEngine.Core.PricesReader();
+            var pricesReader = new BacktestingEngine.Core.CsvReader<Candlestick>();
             var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(period).ToList();
 
@@ -41,7 +43,7 @@
         {
             var sut = new BacktestingEngine.Indicators.ATR(period);
 
-            var pricesReader = new BacktestingEngine.Core.PricesReader();
+            var pricesReader = new BacktestingEngine.Core.CsvReader<Candlestick>();
             var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(datasetSize).ToList();
 
@@ -58,7 +60,7 @@
         {
             var sut = new BacktestingEngine.Indicators.ATR(period);
 
-            var pricesReader = new BacktestingEngine.Core.PricesReader();
+            var pricesReader = new BacktestingEngine.Core.CsvReader<Candlestick>();
             var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(datasetSize).ToList();
 

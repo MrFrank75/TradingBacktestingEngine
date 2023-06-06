@@ -5,13 +5,18 @@ using System.IO;
 
 namespace BacktestingEngine.Core
 {
-    public class PricesReader
+    public class CsvReader<T>
     {
 
-        public IEnumerable<Candlestick> ReadPricesVector(string broker, string security, string timeframe)
+        public IEnumerable<T> ReadPricesVector(string broker, string security, string timeframe)
         {
             string fileName = $"CSVDatabase\\{broker} {security}, {timeframe}.csv";
 
+            return ReadRecords(fileName);
+        }
+
+        public static IEnumerable<T> ReadRecords(string fileName)
+        {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false,
@@ -20,7 +25,7 @@ namespace BacktestingEngine.Core
             using (var reader = new StreamReader(fileName))
             using (var csv = new CsvReader(reader, config))
             {
-                var records = csv.GetRecords<Candlestick>();
+                var records = csv.GetRecords<T>();
                 return records.ToArray();
             }
         }

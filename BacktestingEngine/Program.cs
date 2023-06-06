@@ -9,27 +9,23 @@ namespace BacktestingEngine
         static void Main(string[] args)
         {
             //read the data and place them in a vector
-            List<TradedTicker> tickersToTrade = new List<TradedTicker>
-            {
-                GetTradedTicker("ETCUSDT", "240"),
-                GetTradedTicker("ADAUSDT", "240"),
-                GetTradedTicker("ATOMUSDT", "240"),
-            };
+            List<TradeSetup> tradeSetups = GetTradeSetups();
 
             var tradesExecutionReports = new List<TradeExecutionResult>();
             var strategyBacktestReports = new List<BacktestReport>();
             var pendingTrade = new TradeExecutionResult();
-            var dateFilter = new DateFilter(new DateTime(2022, 1, 1), new DateTime(2023, 1, 1));
-            var strategyToExecute = new TripleSupertrendStrategy(dateFilter);
 
-            foreach (var tradedTicker in tickersToTrade)
+            foreach (var tradeSetup in tradeSetups)
             {
-                Console.WriteLine($"Running strategy on {tradedTicker.Candles.Count} prices for ticker: {tradedTicker.Ticker}");
+                string ticker = tradeSetup.Configuration.Ticker;
+                Console.WriteLine($"Running strategy on {tradeSetup.Candles.Count} prices for ticker: {ticker}");
                 long counter = 0;
-                int tick = tradedTicker.Candles.Count / 20;
-                IStrategyExecutionEngine strategyEngine = new GenericTradingViewStrategyEngine(strategyToExecute, dateFilter, tradedTicker.Ticker);
+                int tick = tradeSetup.Candles.Count / 20;
+                var dateFilter = new DateFilter(tradeSetup.Configuration.TradingStartDate, tradeSetup.Configuration.TradingEndDate);
+                var strategyToExecute = new TripleSupertrendStrategy(dateFilter);
+                IStrategyExecutionEngine strategyEngine = new GenericTradingViewStrategyEngine(strategyToExecute, dateFilter, tradeSetup.Configuration.Ticker);
 
-                foreach (var price in tradedTicker.Candles)
+                foreach (var price in tradeSetup.Candles)
                 {
                     TradeExecutionResult singleTradeExecutionResult = strategyEngine.ExecuteStrategy(price);
 
@@ -52,20 +48,26 @@ namespace BacktestingEngine
                 strategyBacktestReports.Add(strategyEngine.GetSummaryReport());
             }
 
-
-            PrintExecutionResults(tradesExecutionReports);
             PrintSummaryReport(strategyBacktestReports);
+            PrintExecutionResults(tradesExecutionReports);
         }
 
-        private static TradedTicker GetTradedTicker(string tickerName, string timeFrame)
+        private static List<TradeSetup> GetTradeSetups()
         {
-            var pricesReader = new PricesReader();
-            var tickerPriceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", tickerName, timeFrame).ToList();
-            return new TradedTicker
+            var pricesReader = new CsvReader<Candlestick>();
+            var tradeConfigurations = CsvReader<TradeConfiguration>.ReadRecords("TradeSetupConfiguration\\SupertrendSetup.csv");
+            var tradeSetups = new List<TradeSetup>();
+
+            foreach (var configuration in tradeConfigurations)
             {
-                Candles = tickerPriceCandlesticks,
-                Ticker = tickerName,
-            };
+                var tickerPriceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", configuration.Ticker, configuration.Timeframe).ToList();
+                tradeSetups.Add(new TradeSetup
+                {
+                    Candles = tickerPriceCandlesticks,
+                    Configuration = configuration,
+                });    
+            }
+            return tradeSetups;
         }
 
         public static void PrintExecutionResults(List<TradeExecutionResult> results)
@@ -91,7 +93,7 @@ namespace BacktestingEngine
 
         public static void PrintSummaryReport(List<BacktestReport> backtestReports)
         {
-            int colWidth = 20; // Set the column width
+            int colWidth = 15; // Set the column width
             Console.ForegroundColor= ConsoleColor.Gray;
             Console.WriteLine();
             string columnSpacing = "{0,-" + colWidth + "}{1,-" + colWidth + "}{2,-" + colWidth + "}{3,-" + colWidth + "}{4,-" + colWidth + "}{5,-" + colWidth + "}{6,-" + colWidth + "}";
@@ -101,8 +103,9 @@ namespace BacktestingEngine
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine(columnSpacing,report.Ticker, report.StartingCapital, report.EndingCapital,report.Gain, report.GainPerc, report.MaxDrawdown, report.MaxDrawdownPercent);
-
             }
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine();
         }
 
 

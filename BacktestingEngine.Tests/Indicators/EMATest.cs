@@ -1,4 +1,5 @@
-﻿using BacktestingEngine.Strategies;
+﻿using BacktestingEngine.Core;
+using BacktestingEngine.Strategies;
 
 namespace BacktestingEngine.Test.Strategies
 {
@@ -21,7 +22,7 @@ namespace BacktestingEngine.Test.Strategies
         public void EMACalculationTest(int datasetSize, int period, decimal expectedEMA)
         {
 
-            var pricesReader = new BacktestingEngine.Core.PricesReader();
+            var pricesReader = new BacktestingEngine.Core.CsvReader<Candlestick>();
             var priceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", "BTCUSDT", "60").ToList();
             var initialDataSet = priceCandlesticks.Take(datasetSize).ToList();
 
