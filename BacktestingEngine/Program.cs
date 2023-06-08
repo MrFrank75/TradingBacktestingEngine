@@ -60,7 +60,8 @@ namespace BacktestingEngine
 
             foreach (var configuration in tradeConfigurations)
             {
-                var tickerPriceCandlesticks = pricesReader.ReadPricesVector("TESTBROKER", configuration.Ticker, configuration.Timeframe).ToList();
+
+                var tickerPriceCandlesticks = pricesReader.ReadPricesVector("B", configuration.Ticker, configuration.Timeframe,"PrivateCsvDatabase").ToList();
                 tradeSetups.Add(new TradeSetup
                 {
                     Candles = tickerPriceCandlesticks,

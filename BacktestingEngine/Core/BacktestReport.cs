@@ -2,7 +2,7 @@
 {
     public class BacktestReport
     {
-        public string Ticker { get; set; }
+        public string Ticker { get; set; } = string.Empty;
         public decimal StartingCapital { get; set; }
         public decimal EndingCapital { get; set; }
         public decimal Gain{ get; set; }

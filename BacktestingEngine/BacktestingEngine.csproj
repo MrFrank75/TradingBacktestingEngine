@@ -63,4 +63,8 @@
     </None>
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy /I /Y &quot;../PrivateCsvDatabase&quot; &quot;./PrivateCsvDatabase/&quot;" />
+  </Target>
+
 </Project>

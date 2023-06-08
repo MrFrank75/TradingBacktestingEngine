@@ -2,7 +2,7 @@
 {
     public class TradeExecutionResult
     {
-        public string Ticker { get; set; }
+        public string Ticker { get; set; } = string.Empty;
         public TradeState State { get; set; }
         public decimal Gain { get; internal set; }
         public decimal GainPerc { get; internal set; }
