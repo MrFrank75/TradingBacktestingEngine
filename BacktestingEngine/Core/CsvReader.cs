@@ -13,7 +13,7 @@ namespace BacktestingEngine.Core
             string fileName = $"{broker} {security}, {timeframe}.csv";
             var path = Path.Combine(databasePath, fileName);
 
-            return ReadRecords(fileName);
+            return ReadRecords(path);
         }
 
         public static IEnumerable<T> ReadRecords(string fileName)
