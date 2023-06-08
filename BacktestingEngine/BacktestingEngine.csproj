@@ -58,13 +58,43 @@
     <None Update="CsvDatabase\TESTBROKER MATICUSDT, 1D.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="CsvDatabase\TESTBROKER_ADAUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER_ATOMUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER_BTCUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER_BTCUSDT, 60.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER_DASHUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER_DOTUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER_ETCUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER_LINKUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER_LTCUSDT, 240.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="CsvDatabase\TESTBROKER_MATICUSDT, 1D.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TradeSetupConfiguration\SupertrendSetup.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy /I /Y &quot;../PrivateCsvDatabase&quot; &quot;./PrivateCsvDatabase/&quot;" />
+    <Exec Command="xcopy /I /Y &quot;../PrivateCsvDatabase&quot; &quot;./bin/Debug/net7.0/PrivateCsvDatabase/&quot;" />
   </Target>
 
 </Project>

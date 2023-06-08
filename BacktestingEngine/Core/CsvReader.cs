@@ -10,7 +10,7 @@ namespace BacktestingEngine.Core
 
         public IEnumerable<T> ReadPricesVector(string broker, string security, string timeframe, string databasePath="CSVDatabase")
         {
-            string fileName = $"{broker} {security}, {timeframe}.csv";
+            string fileName = $"{broker}_{security}, {timeframe}.csv";
             var path = Path.Combine(databasePath, fileName);
 
             return ReadRecords(path);
