@@ -1,0 +1,3 @@
+[submodule "PrivateCsvDatabase"]
+	path = PrivateCsvDatabase
+	url = https://github.com/MrFrank75/CandlesticksCsvDatabase
