@@ -55,7 +55,7 @@ namespace BacktestingEngine
         private static List<TradeSetup> GetTradeSetups()
         {
             var pricesReader = new CsvReader<Candlestick>();
-            var tradeConfigurations = CsvReader<TradeConfiguration>.ReadRecords("TradeSetupConfiguration\\SupertrendSetup.csv");
+            var tradeConfigurations = CsvReader<TradeConfiguration>.ReadRecords("TradeSetupConfiguration\\SupertrendSetup2021_4h.csv");
             var tradeSetups = new List<TradeSetup>();
 
             foreach (var configuration in tradeConfigurations)
