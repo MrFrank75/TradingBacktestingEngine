@@ -97,6 +97,18 @@
     <None Update="TradeSetupConfiguration\SupertrendSetup2020_4h.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TradeSetupConfiguration\SupertrendSetup2023_4h.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TradeSetupConfiguration\SupertrendSetup2023_1D.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TradeSetupConfiguration\SupertrendSetup2022_4h.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TradeSetupConfiguration\SupertrendSetup2022_1D.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TradeSetupConfiguration\SupertrendSetup2021_4h.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

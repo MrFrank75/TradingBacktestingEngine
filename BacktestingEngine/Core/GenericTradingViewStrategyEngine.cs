@@ -7,7 +7,6 @@
         private const decimal TakerFee = 0.04M / 100M;
 
         private readonly IStrategy _strategy;
-        private readonly IFilter _filter;
         private readonly string _ticker;
         private decimal _percentageUsedForTrade = 100;
         private decimal _currentCapital = initialCapitalUSD;
@@ -20,10 +19,9 @@
         private decimal _currentContracts;
         private List<TradeExecutionResult> _executedTrades;
 
-        public GenericTradingViewStrategyEngine(IStrategy strategyToExecute, IFilter filter, string ticker)
+        public GenericTradingViewStrategyEngine(IStrategy strategyToExecute, string ticker)
         {
             _strategy = strategyToExecute;
-            _filter = filter;
             _ticker = ticker;
             _currentStrategyState = TradeState.Waiting;
             _executedTrades = new List<TradeExecutionResult>();

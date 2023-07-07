@@ -26,7 +26,7 @@ namespace BacktestingEngine.Test.Indicators
 
             var result = sut.CalculateTrueRange(initialDataSet.Last(), initialDataSet[initialDataSet.Count - 1]);
 
-            Assert.AreEqual(expectedTR, result);
+            Assert.That(result, Is.EqualTo(expectedTR));
         }
 
         [Test]

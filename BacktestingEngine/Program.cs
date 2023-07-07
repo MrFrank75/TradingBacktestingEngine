@@ -6,6 +6,8 @@ namespace BacktestingEngine
 {
     internal class Program
     {
+        private const int ProgressBarLength = 20;
+
         static void Main(string[] args)
         {
             //read the data and place them in a vector
@@ -20,10 +22,13 @@ namespace BacktestingEngine
                 string ticker = tradeSetup.Configuration.Ticker;
                 Console.WriteLine($"Running strategy on {tradeSetup.Candles.Count} prices for ticker: {ticker}");
                 long counter = 0;
-                int tick = tradeSetup.Candles.Count / 20;
+                int progressBarTick = tradeSetup.Candles.Count / ProgressBarLength;
+
                 var dateFilter = new DateFilter(tradeSetup.Configuration.TradingStartDate, tradeSetup.Configuration.TradingEndDate);
+                dateFilter.PerformDateCheck(tradeSetup.Candles, tradeSetup.Configuration.Ticker);
+
                 var strategyToExecute = new TripleSupertrendStrategy(dateFilter);
-                IStrategyExecutionEngine strategyEngine = new GenericTradingViewStrategyEngine(strategyToExecute, dateFilter, tradeSetup.Configuration.Ticker);
+                IStrategyExecutionEngine strategyEngine = new GenericTradingViewStrategyEngine(strategyToExecute, tradeSetup.Configuration.Ticker);
 
                 foreach (var price in tradeSetup.Candles)
                 {
@@ -39,7 +44,7 @@ namespace BacktestingEngine
                         tradesExecutionReports.Add(singleTradeExecutionResult);
                     }
                     counter++;
-                    if (counter % tick == 0)
+                    if (counter % progressBarTick == 0)
                         Console.Write("=");
                 }
                 Console.WriteLine("| DONE");
@@ -55,7 +60,7 @@ namespace BacktestingEngine
         private static List<TradeSetup> GetTradeSetups()
         {
             var pricesReader = new CsvReader<Candlestick>();
-            var tradeConfigurations = CsvReader<TradeConfiguration>.ReadRecords("TradeSetupConfiguration\\SupertrendSetup2021_4h.csv");
+            var tradeConfigurations = CsvReader<TradeConfiguration>.ReadRecords("TradeSetupConfiguration\\SupertrendSetup2023_1D.csv");
             var tradeSetups = new List<TradeSetup>();
 
             foreach (var configuration in tradeConfigurations)
